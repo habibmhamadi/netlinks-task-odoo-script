@@ -10,11 +10,11 @@ class Product():
         """Initializing database connection
         """
         db_params = {
-            'host': 'localhost',
-            'database': 'odoo',
-            'user': 'ubuntu',
-            'password': '1234',
-            'port': '5432'
+            'host': '',
+            'database': '',
+            'user': '',
+            'password': '',
+            'port': ''
         }
         try:
             self.db = psycopg2.connect(**db_params)
@@ -25,10 +25,10 @@ class Product():
     def odoo_connect(self):
         """Initializing odoo connection with xmlrpc
         """
-        self.url = 'http://localhost:8069'
-        self.db = 'odoo'
-        self.user = 'admin'
-        self.pwd = 'admin'
+        self.url = ''
+        self.db = ''
+        self.user = ''
+        self.pwd = ''
         try:
             common = xmlrpc.client.ServerProxy('{}/xmlrpc/2/common'.format(self.url))
             self.uid = common.authenticate(self.db, self.user, self.pwd, {})
@@ -77,16 +77,16 @@ class Product():
             })  
         odoo = self.odoo_connect()
         if odoo:
-            step = 10    
-            steps = len(records)//step
+            items = 10    
+            steps = len(records)//items
             total = 0
             nrows = str(nrows)
             print('Uploading...\n')
             if steps>0:
                 count = -1
-                for i in range(0, len(records), step):
+                for i in range(0, len(records), items):
                     count = count+1
-                    split = records[i:i+step] if count<steps else records[i:]         
+                    split = records[i:i+items] if count<steps else records[i:]         
                     ids = odoo.execute_kw(self.db, self.uid, self.pwd, 'product.template', 'create',
                         [split]
                     )
